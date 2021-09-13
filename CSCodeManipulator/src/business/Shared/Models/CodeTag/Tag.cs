@@ -26,10 +26,10 @@ namespace Shared.Models.CodeTag
         public List<TagProperty> Properties { get; set; } = new List<TagProperty>();
         public string Body { get; set; }
 
-        public virtual string Render() => Body.StartsWith(TagStart)
+        public virtual string Render() => Body.Contains(TagStart)
             ? ((Tag)Body).Render()
             : Body;
-        public virtual bool IsEligable(string exp) => exp.StartsWith(GetTagStart());
+        public virtual bool IsEligable(string exp) => exp.Contains(GetTagStart());
 
         protected virtual string GetStringOfProperties() =>
             string.Join(Separator, Properties.Select(m => m.ToString()));

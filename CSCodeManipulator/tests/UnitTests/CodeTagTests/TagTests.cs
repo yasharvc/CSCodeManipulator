@@ -1,4 +1,5 @@
 ﻿using Shared.Models.CodeTag;
+using Shared.Models.CodeTag.Tags;
 using Shouldly;
 using System;
 using System.Collections.Generic;
@@ -54,6 +55,22 @@ namespace UnitTests.CodeTagTests
             res.Properties.Count.ShouldBe(1);
             res.Properties.First().Name.ShouldBe(tag.Properties.First().Name);
             res.Properties.First().Value.ShouldBe(tag.Properties.First().Value);
+        }
+        [Fact]
+        public void Should_Render_keyword()
+        {
+            var usingTag = new KeywordTag { Body = "using" };
+            var wsTag = new WhitespaceTag { Body = $"\t " };
+
+            var res = wsTag.Render();
+
+            res.ShouldNotBeEmpty();
+
+            res.ShouldBe("\t ");
+
+            res = usingTag.Render();
+
+            res.ShouldBe("using");
         }
     }
 }

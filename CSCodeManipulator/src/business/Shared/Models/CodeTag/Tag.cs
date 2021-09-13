@@ -17,7 +17,7 @@ namespace Shared.Models.CodeTag
         public string GetTagFinish() => $"{TagCharacter}{Name}{TagFinish}";
 
         public string Name { get; set; }
-        public List<TagProperty> Properties { get; set; }
+        public List<TagProperty> Properties { get; set; } = new List<TagProperty>();
         public string Body { get; set; }
 
         public abstract string Render();
@@ -30,7 +30,7 @@ namespace Shared.Models.CodeTag
         public static implicit operator Tag(string exp)
         {
             var start = exp.IndexOf(TagStart);
-            var end = exp.IndexOf(TagCharacter);
+            var end = exp.IndexOf(TagCharacter, start);
 
             var res = new RawTag
             {
@@ -41,10 +41,10 @@ namespace Shared.Models.CodeTag
             {
                 try
                 {
-                    res.Name = exp[start..(end - 1)];
+                    res.Name = exp[(start + 1)..end];
                     start = end;
-                    end = exp.IndexOf(Pipe);
-                    var props = exp[start..(end - 1)];
+                    end = exp.IndexOf(Pipe, start);
+                    var props = exp[(start + 1)..end];
                     if (!string.IsNullOrWhiteSpace(props))
                     {
                         var lst = props.Split(Separator);
@@ -56,7 +56,7 @@ namespace Shared.Models.CodeTag
                     start = end;
                     end = exp.LastIndexOf(res.GetTagFinish());
 
-                    res.Body = exp[start..(end - 1)];
+                    res.Body = exp[(start + 1)..end];
                     return res;
                 }
                 catch

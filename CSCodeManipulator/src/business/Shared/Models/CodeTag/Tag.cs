@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared.Models.CodeTag.Tags;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,12 +17,19 @@ namespace Shared.Models.CodeTag
         public string GetTagStart() => $"{TagStart}{Name}{TagCharacter}";
         public string GetTagFinish() => $"{TagCharacter}{Name}{TagFinish}";
 
+        protected static IEnumerable<Tag> AllTags => new Tag[]
+            {
+                new KeywordTag()
+            };
+
         public string Name { get; set; }
         public List<TagProperty> Properties { get; set; } = new List<TagProperty>();
         public string Body { get; set; }
 
-        public abstract string Render();
-        public abstract bool IsEligable(string exp);
+        public virtual string Render() => Body.StartsWith(TagStart)
+            ? ((Tag)Body).Render()
+            : Body;
+        public virtual bool IsEligable(string exp) => exp.StartsWith(GetTagStart());
 
         protected virtual string GetStringOfProperties() =>
             string.Join(Separator, Properties.Select(m => m.ToString()));
@@ -32,10 +40,10 @@ namespace Shared.Models.CodeTag
             var start = exp.IndexOf(TagStart);
             var end = exp.IndexOf(TagCharacter, start);
 
-            var res = new RawTag
-            {
-                Properties = new List<TagProperty>()
-            };
+            Tag tagFromString = AllTags.FirstOrDefault(m => m.IsEligable(exp));
+            Tag res = tagFromString != null ?
+                (Tag)Activator.CreateInstance(tagFromString.GetType())
+                : new RawTag();
 
             if(end > start && start != -1 && end != -1)
             {

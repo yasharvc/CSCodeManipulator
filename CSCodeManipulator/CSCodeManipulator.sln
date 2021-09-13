@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeParser", "src\business\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "tests\UnitTests\UnitTests.csproj", "{B2E623D0-47EB-4917-91AB-C68CE22A378F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeWriter", "src\business\CodeWriter\CodeWriter.csproj", "{F6309DB8-7010-4447-A21A-42C87E820744}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{B2E623D0-47EB-4917-91AB-C68CE22A378F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2E623D0-47EB-4917-91AB-C68CE22A378F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2E623D0-47EB-4917-91AB-C68CE22A378F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6309DB8-7010-4447-A21A-42C87E820744}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6309DB8-7010-4447-A21A-42C87E820744}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6309DB8-7010-4447-A21A-42C87E820744}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6309DB8-7010-4447-A21A-42C87E820744}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -45,6 +51,7 @@ Global
 		{FACD9D8D-52C2-4B40-B993-5F9AA0DDBB75} = {F88D05E8-1209-4464-83B2-D87DF6DBFFB7}
 		{A9197BAB-F04D-48DF-B4A1-9637E3F85E20} = {F88D05E8-1209-4464-83B2-D87DF6DBFFB7}
 		{B2E623D0-47EB-4917-91AB-C68CE22A378F} = {FAC35D70-0127-4259-ACB6-E70E8F6845F0}
+		{F6309DB8-7010-4447-A21A-42C87E820744} = {F88D05E8-1209-4464-83B2-D87DF6DBFFB7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {73D2B0C3-A696-433B-B6EB-482FF294F54A}

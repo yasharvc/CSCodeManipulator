@@ -3,8 +3,5 @@
     public class RawTag : Tag
     {
         public override bool IsEligable(string exp) => false;
-
-        public override string Render() => "";
-
     }
 }

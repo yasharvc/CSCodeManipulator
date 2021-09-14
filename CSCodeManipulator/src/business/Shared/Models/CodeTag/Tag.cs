@@ -19,16 +19,68 @@ namespace Shared.Models.CodeTag
 
         protected static IEnumerable<Tag> AllTags => new Tag[]
             {
-                new KeywordTag()
+                new KeywordTag(),
+                new WhitespaceTag()
             };
 
         public string Name { get; set; }
         public List<TagProperty> Properties { get; set; } = new List<TagProperty>();
         public string Body { get; set; }
 
-        public virtual string Render() => Body.Contains(TagStart)
-            ? ((Tag)Body).Render()
-            : Body;
+        public virtual string Render()
+        {
+            if (!Body.Contains(TagStart))
+                return Body;
+            else
+                return RenderComplexBody();
+        }
+
+        private string RenderComplexBody() => ProcessBody(Body);
+
+        private static string ProcessBody(string temp)
+        {
+            var res = "";
+            while (temp.Length > 0)
+            {
+                var pos = temp.IndexOf(TagStart);
+                if (pos != -1)
+                {
+                    res += temp[..pos];
+
+                    temp = temp[pos..];
+                    pos = GetTagEndPos(temp);
+
+                    res += ((Tag)temp[..pos]).Render();
+
+                    temp = temp[pos..];
+                }
+                else
+                {
+                    res += temp;
+                }
+            }
+            return res;
+        }
+
+        private static int GetTagEndPos(string temp)
+        {
+            var res = 0;
+            var cnt = 0;
+
+            foreach (var ch in temp)
+            {
+                res++;
+                if (ch == TagStart[0])
+                    cnt++;
+                else if (ch == TagFinish[0])
+                    cnt--;
+                if (cnt == 0)
+                    break;
+            }
+
+            return res;
+        }
+
         public virtual bool IsEligable(string exp) => exp.Contains(GetTagStart());
 
         protected virtual string GetStringOfProperties() =>

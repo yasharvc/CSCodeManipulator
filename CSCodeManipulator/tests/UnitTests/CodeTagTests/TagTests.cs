@@ -72,5 +72,30 @@ namespace UnitTests.CodeTagTests
 
             res.ShouldBe("using");
         }
+        [Fact]
+        public void Should_Render_Tag_Inside_Tag()
+        {
+            var usingTag = new KeywordTag { Body = "using" };
+            var wsTag = new WhitespaceTag { Body = $"\t {usingTag}" };
+
+            var res = wsTag.Render();
+
+            res.ShouldNotBeEmpty();
+
+            res.ShouldBe("\t using");
+        }
+        [Fact]
+        public void Should_Render_Tags()
+        {
+            var usingTag = new KeywordTag { Body = "using" };
+            var wsTag = new WhitespaceTag { Body = $"\t\t" };
+            var ws2Tag = new WhitespaceTag { Body = $"\t {usingTag}{wsTag}" };
+
+            var res = ws2Tag.Render();
+
+            res.ShouldNotBeEmpty();
+
+            res.ShouldBe("\t using\t\t");
+        }
     }
 }

@@ -25,8 +25,4 @@
     <ProjectReference Include="..\..\src\business\Shared\Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="CodeParserTests\" />
-  </ItemGroup>
-
 </Project>

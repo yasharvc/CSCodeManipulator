@@ -23,7 +23,7 @@ namespace Shared.Models.CodeTag
                 new WhitespaceTag()
             };
 
-        public string Name { get; set; }
+        public string Name { get; protected set; }
         public List<TagProperty> Properties { get; set; } = new List<TagProperty>();
         public string Body { get; set; }
 

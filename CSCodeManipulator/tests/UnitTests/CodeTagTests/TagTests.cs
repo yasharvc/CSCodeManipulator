@@ -1,4 +1,5 @@
-﻿using Shared.Models.CodeTag;
+﻿using CodeParser;
+using Shared.Models.CodeTag;
 using Shared.Models.CodeTag.Tags;
 using Shouldly;
 using System;
@@ -15,9 +16,8 @@ namespace UnitTests.CodeTagTests
         [Fact]
         public void Should_Parse_Tag()
         {
-            var tag = new RawTag
+            var tag = new RawTag("Test")
             {
-                Name = "Test",
                 Body = "body",
                 Properties = new List<TagProperty>()
             };
@@ -32,9 +32,8 @@ namespace UnitTests.CodeTagTests
         [Fact]
         public void Should_Parse_Tag_With_Property()
         {
-            var tag = new RawTag
+            var tag = new RawTag("keyword")
             {
-                Name = "keyword",
                 Body = "using",
                 Properties = new List<TagProperty>
                 {

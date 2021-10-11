@@ -5,6 +5,7 @@ namespace Shared.Models.CodeExpression
 {
     public abstract class Expression
     {
+        public virtual bool IsBlock => false;
         public IEnumerable<Tag> PrintTags { get; } = new List<Tag>();
         public abstract bool IsCodeStartingEligable(string code);
         public abstract bool IsCodeContinuesEligible(string code);

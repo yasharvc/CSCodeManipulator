@@ -14,7 +14,9 @@ namespace CodeParser
         List<Expression> AvailableExpressions => new()
         {
             new ImportLibraryWithUsingExpression(),
-            new WhitespaceExpression()
+            new WhitespaceExpression(),
+            new EmptyExpression(),
+            new NamespaceExpression()
         };
 
         public List<Expression> CodeExpressions { get; private set; }

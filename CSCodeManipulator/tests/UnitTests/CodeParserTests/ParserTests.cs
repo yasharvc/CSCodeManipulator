@@ -22,6 +22,7 @@ namespace UnitTests.CodeParserTests
 
             parser.CodeExpressions.Count.ShouldBe(1);
             parser.CodeExpressions[0].Render().ShouldBe(code);
+            TestForRenderedCode(code, parser);
         }
 
         [Fact]
@@ -32,7 +33,6 @@ namespace UnitTests.CodeParserTests
             await parser.Compile(code);
 
             (parser.CodeExpressions[0] as ImportLibraryWithUsingExpression).ChangeLibrary("Shared.Models.CodeExpression.Expressions");
-            parser.CodeExpressions[0].Render().ShouldBe("using \tShared.Models.CodeExpression.Expressions ;");
         }
 
 
@@ -45,14 +45,8 @@ namespace UnitTests.CodeParserTests
 
             parser.CodeExpressions.Count.ShouldBe(2);
             parser.CodeExpressions[0].ShouldBeOfType<WhitespaceExpression>();
-            var res = "";
 
-            foreach (var item in parser.CodeExpressions)
-            {
-                res += item.Render();
-            }
-
-            res.ShouldBe(code);
+            TestForRenderedCode(code, parser);
         }
 
 
@@ -66,6 +60,53 @@ namespace UnitTests.CodeParserTests
             parser.CodeExpressions.Count.ShouldBe(3);
             parser.CodeExpressions.First().ShouldBeOfType<WhitespaceExpression>();
             parser.CodeExpressions.Last().ShouldBeOfType<WhitespaceExpression>();
+
+            TestForRenderedCode(code, parser);
+        }
+
+        [Fact]
+        public async void Should_Parse_Two_Using()
+        {
+            var code = "  using \tSystem ;\r\nusing System.Text;";
+            var parser = new Parser();
+            await parser.Compile(code);
+
+            parser.CodeExpressions.Count.ShouldBe(4);
+            parser.CodeExpressions.First().ShouldBeOfType<WhitespaceExpression>();
+            parser.CodeExpressions.Last().ShouldBeOfType<ImportLibraryWithUsingExpression>();
+            var last = parser.CodeExpressions.Last() as ImportLibraryWithUsingExpression;
+
+            last.LibraryName.ShouldBe("System.Text");
+
+            TestForRenderedCode(code, parser);
+        }
+
+        [Fact]
+        public async void Should_Parse_namespace()
+        {
+            var code = "namespace Test.Core{ code(){} }";
+            var parser = new Parser();
+            await parser.Compile(code);
+
+            parser.CodeExpressions.Count.ShouldBe(1);
+            parser.CodeExpressions.First().ShouldBeOfType<NamespaceExpression>();
+            TestForRenderedCode(code, parser);
+        }
+
+        [Fact]
+        public async void Should_Parse_namespace_With_Ignoring_Brakets_Inside_Strings()
+        {
+            var code = "namespace Test.Core{ code(){\"}\"} }";
+            var parser = new Parser();
+            await parser.Compile(code);
+
+            parser.CodeExpressions.Count.ShouldBe(1);
+            parser.CodeExpressions.First().ShouldBeOfType<NamespaceExpression>();
+            TestForRenderedCode(code, parser);
+        }
+
+        private static void TestForRenderedCode(string code, Parser parser)
+        {
             var res = "";
 
             foreach (var item in parser.CodeExpressions)

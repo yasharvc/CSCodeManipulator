@@ -30,13 +30,5 @@ namespace UnitTests
 
             exp.NextWord(2).ShouldBe(expected);
         }
-        [Fact]
-        public void NextWord_Should_Return_Test2()
-        {
-            var exp = " \tTest \r Test2";
-            var expected = "Test2";
-
-            exp.NextWord((uint)exp.NextWord().Length).ShouldBe(expected);
-        }
     }
 }

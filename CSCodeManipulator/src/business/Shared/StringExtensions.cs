@@ -31,6 +31,8 @@ namespace Shared
                 return "";
             if (string.IsNullOrWhiteSpace(code))
                 return code;
+            if (pos >= code.Length)
+                return "";
             var res = $"{code[pos]}";
             var isWhitespace = char.IsWhiteSpace(code[pos]);
             for (int i = pos + 1; i < code.Length; i++)

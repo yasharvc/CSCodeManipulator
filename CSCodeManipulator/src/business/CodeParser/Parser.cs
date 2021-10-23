@@ -1,6 +1,7 @@
 ﻿using Shared;
 using Shared.Models.CodeExpression;
 using Shared.Models.CodeExpression.Expressions;
+using Shared.Models.CodeTag.Tags;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,12 +40,19 @@ namespace CodeParser
                     throw new NotImplementedException();
                 var expr = selectedExpressions.First();
                 pos += expr.Compile(code[pos..]);
+                ProcessInnerExpressions(expr);
                 CodeExpressions.Add(expr);
                 //code = code[pos..];
             }
             return Task.CompletedTask;
         }
 
-        
+        private void ProcessInnerExpressions(Expression expr)
+        {
+            if (expr.InnerExpressions.Any())
+            {
+                var lst = expr.PrintTags.Single(m=>m is ExpressionRenderTag && (m as ExpressionRenderTag).Properties.First().Value == expr.)
+            }
+        }
     }
 }

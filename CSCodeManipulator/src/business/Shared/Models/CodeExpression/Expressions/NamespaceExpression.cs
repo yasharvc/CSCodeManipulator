@@ -8,7 +8,6 @@ namespace Shared.Models.CodeExpression.Expressions
     public class NamespaceExpression : Expression
     {
         public string NamespaceName { get; set; }
-        public override bool IsBlock => true;
         public override int Compile(string code)
         {
             var codeTillBlockStart = code.StopWhenFind('{');
@@ -51,7 +50,9 @@ namespace Shared.Models.CodeExpression.Expressions
             AddPrintTag(new WhitespaceTag { Body = whitespaceStr });
             AddPrintTag(new NamespaceNameTag { Body = NamespaceName });
             AddPrintTag(new WhitespaceTag { Body = whitespaceStrAfterlibraryStr });
-            AddPrintTag(new KeywordTag { Body = body });
+            AddPrintTag(new BlockStartTag());
+            AddPrintTag(new ExpressionRenderTag { ExpressionKey = "namespace body", Body = body[1..^1] });
+            AddPrintTag(new BlockStartTag());
             return codeTillBlockStart.Length + body.Length;
         }
 

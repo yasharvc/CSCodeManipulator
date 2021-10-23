@@ -1,12 +1,13 @@
 ﻿using Shared.Models.CodeTag;
+using Shared.Models.CodeTag.Tags;
 using System.Collections.Generic;
 
 namespace Shared.Models.CodeExpression
 {
     public abstract class Expression
     {
-        public virtual bool IsBlock => false;
         public IEnumerable<Tag> PrintTags { get; } = new List<Tag>();
+        public Dictionary<string, Expression> InnerExpressions { get; set; } = new Dictionary<string, Expression>();
         public abstract bool IsCodeStartingEligable(string code);
         public abstract bool IsCodeContinuesEligible(string code);
         public abstract int Compile(string code);
@@ -15,7 +16,15 @@ namespace Shared.Models.CodeExpression
             var res = "";
             foreach (var item in PrintTags)
             {
-                res += item.Render();
+                if (item is ExpressionRenderTag)
+                {
+                    var r = item as ExpressionRenderTag;
+                    res += InnerExpressions[r.ExpressionKey].Render();
+                }
+                else
+                {
+                    res += item.Render();
+                }
             }
             return res;
         }

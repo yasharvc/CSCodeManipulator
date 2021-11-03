@@ -6,8 +6,8 @@ namespace Shared.Models.CodeExpression
 {
     public abstract class Expression
     {
-        public IEnumerable<Tag> PrintTags { get; } = new List<Tag>();
-        public Dictionary<string, Expression> InnerExpressions { get; set; } = new Dictionary<string, Expression>();
+        public List<Tag> PrintTags { get; set; } = new List<Tag>();
+        public Dictionary<string, List<Expression>> InnerExpressions { get; set; } = new Dictionary<string, List<Expression>>();
         public abstract bool IsCodeStartingEligable(string code);
         public abstract bool IsCodeContinuesEligible(string code);
         public abstract int Compile(string code);
@@ -19,7 +19,8 @@ namespace Shared.Models.CodeExpression
                 if (item is ExpressionRenderTag)
                 {
                     var r = item as ExpressionRenderTag;
-                    res += InnerExpressions[r.ExpressionKey].Render();
+                    InnerExpressions[r.ExpressionKey]?.ForEach(x => res += x.Render());
+
                 }
                 else
                 {
@@ -28,6 +29,6 @@ namespace Shared.Models.CodeExpression
             }
             return res;
         }
-        protected void AddPrintTag(Tag tag) => (PrintTags as List<Tag>).Add(tag);
+        protected void AddPrintTag(Tag tag) => PrintTags.Add(tag);
     }
 }

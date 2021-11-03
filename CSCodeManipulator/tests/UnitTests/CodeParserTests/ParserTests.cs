@@ -21,7 +21,6 @@ namespace UnitTests.CodeParserTests
             await parser.Compile(code);
 
             parser.CodeExpressions.Count.ShouldBe(1);
-            parser.CodeExpressions[0].Render().ShouldBe(code);
             TestForRenderedCode(code, parser);
         }
 
@@ -84,7 +83,7 @@ namespace UnitTests.CodeParserTests
         [Fact]
         public async void Should_Parse_namespace()
         {
-            var code = "namespace Test.Core{ code(){} }";
+            var code = "namespace Test.Core{ var x= 10; }";
             var parser = new Parser();
             await parser.Compile(code);
 
@@ -96,7 +95,8 @@ namespace UnitTests.CodeParserTests
         [Fact]
         public async void Should_Parse_namespace_With_Ignoring_Brakets_Inside_Strings()
         {
-            var code = "namespace Test.Core{ code(){\"}\"} }";
+            //var code = "namespace Test.Core{ void code(){string str = \"}\";} }";
+            var code = "namespace Test.Core{ var x= \"}\"; }";
             var parser = new Parser();
             await parser.Compile(code);
 

@@ -20,7 +20,7 @@ namespace Shared.Models.CodeExpression.Expressions
             AddPrintTag(new WhitespaceTag { Body = whitespaceStr });
             AddPrintTag(new NamespaceNameTag { Body = LibraryName });
             AddPrintTag(new WhitespaceTag { Body = whitespaceStrAfterlibraryStr });
-            AddPrintTag(new KeywordTag { Body = ";" });
+            AddPrintTag(new SemicolonTag());
             return codeTillSemicolon.Length + 1;
         }
 

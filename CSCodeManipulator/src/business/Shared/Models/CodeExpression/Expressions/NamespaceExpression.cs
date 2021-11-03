@@ -1,5 +1,6 @@
 ﻿using Shared.Models.CodeTag;
 using Shared.Models.CodeTag.Tags;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -46,13 +47,18 @@ namespace Shared.Models.CodeExpression.Expressions
                 charBefore = item;
             }
 
+            var bodyExpr = new RawExpression();
+            bodyExpr.Compile(body[1..^1]);
+
+            InnerExpressions.Add("namespace body", new List<Expression> { bodyExpr });
+
             AddPrintTag(new KeywordTag { Body = "namespace" });
             AddPrintTag(new WhitespaceTag { Body = whitespaceStr });
             AddPrintTag(new NamespaceNameTag { Body = NamespaceName });
             AddPrintTag(new WhitespaceTag { Body = whitespaceStrAfterlibraryStr });
             AddPrintTag(new BlockStartTag());
             AddPrintTag(new ExpressionRenderTag { ExpressionKey = "namespace body", Body = body[1..^1] });
-            AddPrintTag(new BlockStartTag());
+            AddPrintTag(new BlockEndTag());
             return codeTillBlockStart.Length + body.Length;
         }
 

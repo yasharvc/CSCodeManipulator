@@ -1,6 +1,7 @@
 ﻿using Shared;
 using Shared.Models.CodeExpression;
 using Shared.Models.CodeExpression.Expressions;
+using Shared.Models.CodeTag;
 using Shared.Models.CodeTag.Tags;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,12 @@ namespace CodeParser
     {
         List<Expression> AvailableExpressions => new()
         {
-            new ImportLibraryWithUsingExpression(),
-            new WhitespaceExpression(),
             new EmptyExpression(),
-            new NamespaceExpression()
+            new ImportLibraryWithUsingExpression(),
+            new NamespaceExpression(),
+            //new RawExpression(),
+            new VarSimpleAssignExpression(),
+            new WhitespaceExpression(),
         };
 
         public List<Expression> CodeExpressions { get; private set; }
@@ -51,7 +54,26 @@ namespace CodeParser
         {
             if (expr.InnerExpressions.Any())
             {
-                var lst = expr.PrintTags.Single(m=>m is ExpressionRenderTag && (m as ExpressionRenderTag).Properties.First().Value == expr.)
+                foreach (var item in expr.InnerExpressions)
+                {
+                    var tagIndex = expr.PrintTags.FindIndex(m => m is ExpressionRenderTag && (m as ExpressionRenderTag).Properties.First().Value == item.Key);
+                    if (tagIndex != -1)
+                    {
+                        var tag = expr.PrintTags[tagIndex] as ExpressionRenderTag;
+
+                        var res = new List<Tag>();
+                        res.AddRange(expr.PrintTags.Take(tagIndex));
+
+                        var x = new Parser();
+                        x.Compile(tag.Body);
+                        //replace expression with x.Expressions
+                        //replace printags with x.PrintTags
+                        x.CodeExpressions.ForEach(x => res.AddRange(x.PrintTags));
+
+                        res.AddRange(expr.PrintTags.Skip(tagIndex+1));
+                        expr.PrintTags = res;
+                    }
+                }
             }
         }
     }
